@@ -1,0 +1,21 @@
+<div data-role="page">
+
+  <div data-role="header" data-position="inline">
+    <h1>軒崴影像查詢系統</h1>
+  </div>
+
+  <div data-role="content">
+    <form method="GET" action="<%= url_for :controller => :Settings, :action => :do_login %>">
+      <div data-role="fieldcontain">
+        <label for="id" class="itemLabel">ID</label>
+        <input type="text" id="id" name="id" value="<%= @id %>" class="itemValue" />
+      </div>
+      <div data-role="fieldcontain">
+        <label for="password" class="itemLabel">Password</label>
+        <input type="password" id="password" name="password" value="<%= @password %>" class="itemValue" />
+      </div>
+      <input type="submit" value="Login"/>
+    </form>
+  </div>
+
+</div>

@@ -1,0 +1,13 @@
+<div data-role="page">
+
+
+  <div data-role="content">
+    <ul data-role="listview">
+      <% @aa.each do |rec| %>
+        <%= "<li>#{rec}</li>" %>
+      <% end %>
+      <a href="<%= url_for :controller => :Settings, :action => :do_go %>" class="ui-btn-right" data-icon="star">Next Page</a>
+    </ul>
+  </div>
+
+</div>

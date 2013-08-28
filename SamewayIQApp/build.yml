@@ -1,0 +1,26 @@
+#sdk: "D:/MotorolaRhoMobileSuite2.2.1.13/ruby/lib/ruby/gems/1.9.1/gems/rhodes-3.5.1.13"
+sdkversion: "3.5.0"
+name: "SamewayIQApp"
+version: 1.0
+vendor: "rhomobile"
+build: "debug"
+bbver: 4.6
+applog: "rholog.txt"
+iphone:
+  configuration: "Release"
+  sdk: "iphonesimulator5.0"
+  provisionprofile: 
+  codesignidentity: 
+  entitlements: 
+  BundleIdentifier: "com.rhomobile.samewayiqapp"
+  BundleURLScheme: "samewayiqapp"
+wp:
+  productid: "063c95b0-edef-0130-146c-3caec5921803"
+symbian:
+  uid: "0xec3d16f0"
+android:
+  version: "4.0.3"
+  emulator: "AVD_for_4_65in_720p_Galaxy_Nexus"
+extensions:
+  - json
+  - another-extension
