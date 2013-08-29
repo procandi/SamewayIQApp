@@ -9,7 +9,11 @@ class AppApplication < Rho::RhoApplication
     @@toolbar = nil
     #setting default menu list
     @default_menu = {
-      "設定" => Rho::RhoConfig.options_path+'/config'
+      "回首頁" => Rho::RhoConfig.start_path,
+      "設定" => Rho::RhoConfig.options_path+'/go_config',
+      "重新整理" => :refresh,
+      "關閉系統" => :close,
+      "除錯" => :log
     }
     super
 

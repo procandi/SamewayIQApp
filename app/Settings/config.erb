@@ -7,24 +7,12 @@
   <div data-role="content">
     <form method="GET" action="<%= url_for :controller => :Settings, :action => :do_config %>">
       <div data-role="fieldcontain">
-        <label for="class" class="itemLabel">Class</label>
-        <input type="text" id="class" name="class" value="<%= @class %>" class="itemValue" />
-      </div>
-      <div data-role="fieldcontain">
         <label for="ip" class="itemLabel">IP</label>
         <input type="text" id="ip" name="ip" value="<%= @ip %>" class="itemValue" />
       </div>
       <div data-role="fieldcontain">
-        <label for="id" class="itemLabel">ID</label>
-        <input type="text" id="id" name="id" value="<%= @id %>" class="itemValue" />
-      </div>
-      <div data-role="fieldcontain">
-        <label for="password" class="itemLabel">Password</label>
-        <input type="password" id="password" name="password" value="<%= @password %>" class="itemValue" />
-      </div>
-      <div data-role="fieldcontain">
-        <label for="sid" class="itemLabel">SID</label>
-        <input type="text" id="sid" name="sid" value="<%= @sid %>" class="itemValue" />
+        <label for="port" class="itemLabel">Port</label>
+        <input type="text" id="port" name="port" value="<%= @port %>" class="itemValue" />
       </div>
       <input type="submit" value="OK"/>
     </form>

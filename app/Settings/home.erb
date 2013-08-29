@@ -3,10 +3,9 @@
 
   <div data-role="content">
     <ul data-role="listview">
-      <% @aa.each do |rec| %>
-        <%= "<li>#{rec}</li>" %>
+      <% @aa.each do |rec| %>       
+        <div id="leftItem" class="regularButton"><%= link_to rec, action: "do_go", id: rec[0] %></div>
       <% end %>
-      <a href="<%= url_for :controller => :Settings, :action => :do_go %>" class="ui-btn-right" data-icon="star">Next Page</a>
     </ul>
   </div>
 
