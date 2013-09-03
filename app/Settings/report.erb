@@ -1,0 +1,20 @@
+<div data-role="page">
+
+  <div data-role="header" data-position="inline">
+    <h1>報告</h1>
+  </div>
+
+  <div data-role="content">
+    <ul data-role="listview">
+      <% if @report=='' %>
+          <li>尚未輸鍵報告</li>
+      <% else %>
+          <li><%= @report %></li>
+      <% end %>
+    </ul>
+    <form method="GET" action="<%= url_for :controller => :Settings, :action => :do_image %>">
+      <input type="submit" value="檢視影像"/>
+    </form>
+  </div>
+
+</div>

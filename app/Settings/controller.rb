@@ -7,9 +7,36 @@ require 'helpers/browser_helper'
 class SettingsController < Rho::RhoController
   include BrowserHelper
   
-  def do_go
-    @a=@params['id']
-    render :action => :home2
+  #getting report data from Sinatra RESTful server
+  def do_image
+    get_config
+    
+    @id=@params['id']
+      
+    #request="http://#{@ip}:#{@port}/OpenReportByAccessionNO/#{@id}"
+    #res = Rho::AsyncHttp.get(
+    #  :url => request
+    #)
+    
+    @image=@id
+      
+    render :action => :image
+  end
+  
+  #getting report data from Sinatra RESTful server
+  def do_report
+    get_config
+    
+    @id=@params['id']
+    
+    request="http://#{@ip}:#{@port}/OpenReportByAccessionNO/#{@id}"
+    res = Rho::AsyncHttp.get(
+      :url => request
+    )
+    
+    @report = Rho::JSON.parse(res["body"].gsub('\\\r\\\n','<br>'))
+    
+    render :action => :report
   end
   
   #getting elink from Sinatra RESTful server
