@@ -3,7 +3,7 @@
 
   <div data-role="content">
     <ul data-role="listview">
-      <% @aa.each do |rec| %>       
+      <% @elinks.each do |rec| %>       
         <div id="leftItem" class="regularButton"><%= link_to rec, action: "do_report", id: rec[0] %></div>
       <% end %>
     </ul>

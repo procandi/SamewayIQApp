@@ -12,7 +12,7 @@
           <li><%= @report %></li>
       <% end %>
     </ul>
-    <form method="GET" action="<%= url_for :controller => :Settings, :action => :do_image %>">
+    <form method="GET" action="<%= url_for :controller => :Settings, :action => :do_image, id: @id %>">
       <input type="submit" value="檢視影像"/>
     </form>
   </div>

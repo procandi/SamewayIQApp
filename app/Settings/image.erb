@@ -1,13 +1,14 @@
 <div data-role="page">
 
   <div data-role="header" data-position="inline">
-    <h1>RhoMobileApplication1</h1>
+    <h1>影像<%= @id %></h1>
+    
+    <a href="<%= url_for :controller => :Settings, :action => :do_move_left %>" class="ui-btn-left" data-icon="star">Previous</a>
+    <a href="<%= url_for :controller => :Settings, :action => :do_move_right %>" class="ui-btn-right" data-icon="star">Next</a>
   </div>
 
   <div data-role="content">
-    <ul data-role="listview">
-      <li><%= @image %></li>
-    </ul>
+    <img src="<%= @image %>">
   </div>
 
 </div>

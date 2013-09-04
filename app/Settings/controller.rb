@@ -7,18 +7,32 @@ require 'helpers/browser_helper'
 class SettingsController < Rho::RhoController
   include BrowserHelper
   
+  #move image serials to next step
+  def do_move_right
+    do_image
+  end
+  
+  #move image serials to previous step
+  def do_move_left
+    do_image
+  end
+    
   #getting report data from Sinatra RESTful server
   def do_image
     get_config
     
     @id=@params['id']
-      
-    #request="http://#{@ip}:#{@port}/OpenReportByAccessionNO/#{@id}"
-    #res = Rho::AsyncHttp.get(
-    #  :url => request
-    #)
     
-    @image=@id
+    file_name = File.join(Rho::RhoApplication::get_base_app_path, "test.jpg")
+       
+    Rho::AsyncHttp.download_file(
+      :url => "http://#{@ip}:#{@port}/test.jpg",
+      :filename => file_name,
+      :headers => {},
+      :callback => url_for(:action => :httpdownload_callback)
+    )
+
+    @image=file_name
       
     render :action => :image
   end
@@ -40,15 +54,16 @@ class SettingsController < Rho::RhoController
   end
   
   #getting elink from Sinatra RESTful server
-  def get_elink_all
+  def get_elink_today
     #request="http://#{@ip}:#{@port}/QueryByAccessionNO/1429958235"
-    request="http://#{@ip}:#{@port}/QueryByChartNO/2172145"
+    #request="http://#{@ip}:#{@port}/QueryByChartNO/2172145"
     #request="http://#{@ip}:#{@port}/QueryByExamDate/2012/10/25"
+    request="http://#{@ip}:#{@port}/test"
     res = Rho::AsyncHttp.get(
       :url => request
     )
     
-    @aa = Rho::JSON.parse(res["body"])
+    @elinks = Rho::JSON.parse(res["body"])
      
     render :action => :home
   end
@@ -73,7 +88,7 @@ class SettingsController < Rho::RhoController
     if @id==@password
       set_login_menu
       get_config
-      get_elink_all
+      get_elink_today
     else
       render :action => :verify_faild
     end
@@ -88,12 +103,17 @@ class SettingsController < Rho::RhoController
   #reading config from file
   def get_config
     path_to_prop=Rho::RhoApplication::get_blob_path('/')+'config.propertories'
-        
-    fin=File.open(path_to_prop,'r')
-    result=fin.read()
-    @ip=result.gsub(/:.*/,'')
-    @port=result.gsub(/.*:/,'')
-    fin.close
+    
+    if test ?e, path_to_prop
+      fin=File.open(path_to_prop,'r')
+      result=fin.read()
+      @ip=result.gsub(/:.*/,'')
+      @port=result.gsub(/.*:/,'')
+      fin.close
+    else
+      @ip=''
+      @port=''
+    end
   end
   
   #setting config to file
