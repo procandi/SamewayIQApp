@@ -41,7 +41,7 @@ class SettingsController < Rho::RhoController
   def do_report
     get_config
     
-    @id=@params['id']
+    @id=@params['id'].gsub('{','').gsub('}','')
     
     request="http://#{@ip}:#{@port}/OpenReportByAccessionNO/#{@id}"
     res = Rho::AsyncHttp.get(
@@ -49,16 +49,16 @@ class SettingsController < Rho::RhoController
     )
     
     @report = Rho::JSON.parse(res["body"].gsub('\\\r\\\n','<br>'))
-    
+        
     render :action => :report
   end
   
   #getting elink from Sinatra RESTful server
   def get_elink_today
-    #request="http://#{@ip}:#{@port}/QueryByAccessionNO/1429958235"
-    #request="http://#{@ip}:#{@port}/QueryByChartNO/2172145"
+    request="http://#{@ip}:#{@port}/QueryByAccessionNO/A11R4C02738"
+    #request="http://#{@ip}:#{@port}/QueryByChartNO/0000201041"
     #request="http://#{@ip}:#{@port}/QueryByExamDate/2012/10/25"
-    request="http://#{@ip}:#{@port}/test"
+    #request="http://#{@ip}:#{@port}/test"
     res = Rho::AsyncHttp.get(
       :url => request
     )

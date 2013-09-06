@@ -5,13 +5,12 @@
   </div>
 
   <div data-role="content">
-    <ul data-role="listview">
-      <% if @report=='' %>
-          <li>尚未輸鍵報告</li>
-      <% else %>
-          <li><%= @report %></li>
-      <% end %>
-    </ul>
+    <% if @report=='' %>
+      尚未輸鍵報告
+    <% else %>
+      <%= @report %>
+    <% end %>
+
     <form method="GET" action="<%= url_for :controller => :Settings, :action => :do_image, id: @id %>">
       <input type="submit" value="檢視影像"/>
     </form>
