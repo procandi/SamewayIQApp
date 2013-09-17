@@ -17,12 +17,11 @@ class SettingsController < Rho::RhoController
     do_image
   end
     
-  #getting report data from Sinatra RESTful server
-  def do_image
+  #getting image from FTP server
+  def do_image(imagelist,index)
+=begin
     get_config
-    
-    @id=@params['id']
-    
+        
     file_name = File.join(Rho::RhoApplication::get_base_app_path, "test.jpg")
        
     Rho::AsyncHttp.download_file(
@@ -32,9 +31,30 @@ class SettingsController < Rho::RhoController
       :callback => url_for(:action => :httpdownload_callback)
     )
 
-    @image=file_name
-      
+    @image=file_name  
+=end
+
+    @index=index
+    @imagepath=imagelist[index][0]
+    @imagename=imagelist[index][1]
+    
     render :action => :image
+  end
+  
+  #getting image list from Sinatra RESTful server
+  def get_image_list
+    get_config
+        
+    @id=@params['id'].gsub('{','').gsub('}','')
+    
+    request="http://#{@ip}:#{@port}/GetImageListByAccessionNO/#{@id}"
+    res = Rho::AsyncHttp.get(
+      :url => request
+    )
+    
+    @imagelist = Rho::JSON.parse(res["body"])
+        
+    do_image(@imagelist,0)  
   end
   
   #getting report data from Sinatra RESTful server
