@@ -3,12 +3,15 @@
   <div data-role="header" data-position="inline">
     <h1>影像<%= @id %></h1>
     
-    <a href="<%= url_for :controller => :Settings, :action => :do_move_left %>" class="ui-btn-left" data-icon="star">Previous</a>
-    <a href="<%= url_for :controller => :Settings, :action => :do_move_right %>" class="ui-btn-right" data-icon="star">Next</a>
-  </div>
+    <a href="<%= url_for :controller => :Settings, :action => :do_move_left, :query=>{:id=>@id, :index=>@index, :imagelist=>@imagelist} %>" class="ui-btn-left" data-icon="star">Previous</a>
+    <a href="<%= url_for :controller => :Settings, :action => :do_move_right, :query=>{:id=>@id, :index=>@index,  :imagelist=>@imagelist} %>" class="ui-btn-right" data-icon="star">Next</a>
+   </div>
 
   <div data-role="content">
-    <%= @imagepath+@imagename %>  
+
+      
+    <%= @index %>
+    <%= @imagelist[@index] %>
   </div>
 
 </div>

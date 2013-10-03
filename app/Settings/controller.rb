@@ -9,16 +9,30 @@ class SettingsController < Rho::RhoController
   
   #move image serials to next step
   def do_move_right
-    do_image
+    @id=@params['id']
+    @index=@params['index'].to_i()+1
+    @temp=@params['imagelist']
+    @imagelist=@temp.split(',')
+    
+    puts @imagelist
+    
+    render :action => :image
   end
   
   #move image serials to previous step
   def do_move_left
-    do_image
+    @id=@params['id']
+    @index=@params['index'].to_i()-1
+    @temp=@params['imagelist']
+    @imagelist=@temp.split(',')
+    
+    puts @imagelist
+          
+    render :action => :image
   end
     
   #getting image from FTP server
-  def do_image(imagelist,index)
+  def do_image()
 =begin
     get_config
         
@@ -33,10 +47,6 @@ class SettingsController < Rho::RhoController
 
     @image=file_name  
 =end
-
-    @index=index
-    @imagepath=imagelist[index][0]
-    @imagename=imagelist[index][1]
     
     render :action => :image
   end
@@ -52,9 +62,16 @@ class SettingsController < Rho::RhoController
       :url => request
     )
     
-    @imagelist = Rho::JSON.parse(res["body"])
-        
-    do_image(@imagelist,0)  
+    @temp = Rho::JSON.parse(res["body"])
+
+    @imagelist=Array.new(@temp.length){|i|
+      @temp[i][0]+@temp[i][1]
+    }
+    @index=0
+    
+    puts @imagelist
+    
+    do_image()  
   end
   
   #getting report data from Sinatra RESTful server
