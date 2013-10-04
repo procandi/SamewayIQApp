@@ -1,17 +1,17 @@
 <div data-role="page">
 
   <div data-role="header" data-position="inline">
-    <h1>影像<%= @id %></h1>
-    
-    <a href="<%= url_for :controller => :Settings, :action => :do_move_left, :query=>{:id=>@id, :index=>@index, :imagelist=>@imagelist} %>" class="ui-btn-left" data-icon="star">Previous</a>
-    <a href="<%= url_for :controller => :Settings, :action => :do_move_right, :query=>{:id=>@id, :index=>@index,  :imagelist=>@imagelist} %>" class="ui-btn-right" data-icon="star">Next</a>
+    <%= "<h1>影像第#{@index+1}張</h1>" %>
+    <% if @index>0 %>
+          <a href="<%= url_for :controller => :Settings, :action => :do_move_left, :query=>{:accno=>@accno, :index=>@index, :imagemax=>@imagemax, :imagelist=>@imagelist} %>" class="ui-btn-left" data-icon="star">Previous</a>
+    <% end %>
+    <% if @index<@imagemax %>
+          <a href="<%= url_for :controller => :Settings, :action => :do_move_right, :query=>{:accno=>@accno, :index=>@index, :imagemax=>@imagemax, :imagelist=>@imagelist} %>" class="ui-btn-right" data-icon="star">Next</a>
+    <% end %>
    </div>
 
   <div data-role="content">
-
-      
-    <%= @index %>
-    <%= @imagelist[@index] %>
+    <%= "<img src=\"/public/img#{@index}.jpg\">" %>
   </div>
 
 </div>

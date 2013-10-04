@@ -1,10 +1,13 @@
 <div data-role="page">
 
+  <div data-role="header" data-position="inline">
+    <h1>軒崴影像查詢系統</h1>
+  </div>
 
   <div data-role="content">
     <ul data-role="listview">
       <% @elinks.each do |rec| %>       
-        <div id="leftItem" class="regularButton"><%= link_to rec, action: "do_report", id: rec[0] %></div>
+      <div id="leftItem" class="regularButton"><%= link_to rec, :action=>"do_report", :query=>{:accno=>rec[0]} %></div>
       <% end %>
     </ul>
   </div>

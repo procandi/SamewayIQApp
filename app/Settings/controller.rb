@@ -9,78 +9,88 @@ class SettingsController < Rho::RhoController
   
   #move image serials to next step
   def do_move_right
-    @id=@params['id']
+    set_login_menu
+    get_config
+    
+    @accno=@params['accno']
     @index=@params['index'].to_i()+1
-    @temp=@params['imagelist']
+    @imagemax=@params['imagemax'].to_i()
+    #@temp=@params['imagehash'].split(',')
+    #@imagehash=Hash.new(*@temp)
+    @temp=@params['imagelist'].gsub(/[\"\[\]]/,'').gsub('\\\\','\\')
     @imagelist=@temp.split(',')
-    
-    puts @imagelist
-    
-    render :action => :image
+
+    do_image()
   end
   
   #move image serials to previous step
   def do_move_left
-    @id=@params['id']
+    set_login_menu
+    get_config
+    
+    @accno=@params['accno']
     @index=@params['index'].to_i()-1
-    @temp=@params['imagelist']
+    @imagemax=@params['imagemax'].to_i()
+    #@temp=@params['imagehash'].split(',')
+    #@imagehash=Hash.new(*@temp)
+    @temp=@params['imagelist'].gsub(/[\"\[\]]/,'').gsub('\\\\','\\')
     @imagelist=@temp.split(',')
     
-    puts @imagelist
-          
-    render :action => :image
+    do_image()
   end
     
   #getting image from FTP server
-  def do_image()
-=begin
-    get_config
-        
-    file_name = File.join(Rho::RhoApplication::get_base_app_path, "test.jpg")
-       
+  def do_image()  
+    file_name = File.join(Rho::RhoApplication::get_base_app_path+'public/', "img#{@index}.jpg")
+    url=@imagelist[@index].gsub('\\','/').gsub(/.*Cris_Images\//,"http://#{@ip}:#{@port}/")
     Rho::AsyncHttp.download_file(
-      :url => "http://#{@ip}:#{@port}/test.jpg",
+      :url => url,
       :filename => file_name,
       :headers => {},
       :callback => url_for(:action => :httpdownload_callback)
     )
 
     @image=file_name  
-=end
-    
+
     render :action => :image
   end
   
   #getting image list from Sinatra RESTful server
   def get_image_list
+    set_login_menu
     get_config
         
-    @id=@params['id'].gsub('{','').gsub('}','')
+    @accno=@params['accno'].gsub('{','').gsub('}','')
     
-    request="http://#{@ip}:#{@port}/GetImageListByAccessionNO/#{@id}"
+    request="http://#{@ip}:#{@port}/GetImageListByAccessionNO/#{@accno}"
     res = Rho::AsyncHttp.get(
       :url => request
     )
     
     @temp = Rho::JSON.parse(res["body"])
-
-    @imagelist=Array.new(@temp.length){|i|
+    @imagemax=@temp.length
+    #@imagehash=Hash.new do |hash,key|
+    #  hash[key]=key
+    #end
+    #@imagemax.times() do |i|
+    #  @imagehash[i]=@temp[i][0]+@temp[i][1]
+    #end
+    @imagelist=Array.new(@imagemax) do |i|  
       @temp[i][0]+@temp[i][1]
-    }
+    end
     @index=0
-    
-    puts @imagelist
-    
+
     do_image()  
   end
   
   #getting report data from Sinatra RESTful server
   def do_report
+    set_login_menu
     get_config
     
-    @id=@params['id'].gsub('{','').gsub('}','')
+    @accno=@params['accno'].gsub('{','').gsub('}','')
     
-    request="http://#{@ip}:#{@port}/OpenReportByAccessionNO/#{@id}"
+    request="http://#{@ip}:#{@port}/OpenReportByAccessionNO/#{@accno}"
     res = Rho::AsyncHttp.get(
       :url => request
     )
@@ -92,8 +102,11 @@ class SettingsController < Rho::RhoController
   
   #getting elink from Sinatra RESTful server
   def get_elink_today
-    request="http://#{@ip}:#{@port}/QueryByAccessionNO/A11R4C02738"
-    #request="http://#{@ip}:#{@port}/QueryByChartNO/0000201041"
+    set_login_menu
+    get_config
+    
+    #request="http://#{@ip}:#{@port}/QueryByAccessionNO/A11R4C02738"
+    request="http://#{@ip}:#{@port}/QueryByChartNO/8006154"
     #request="http://#{@ip}:#{@port}/QueryByExamDate/2012/10/25"
     #request="http://#{@ip}:#{@port}/test"
     res = Rho::AsyncHttp.get(
@@ -123,8 +136,6 @@ class SettingsController < Rho::RhoController
     @password=@params['password']
     
     if @id==@password
-      set_login_menu
-      get_config
       get_elink_today
     else
       render :action => :verify_faild

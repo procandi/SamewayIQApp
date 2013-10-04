@@ -1,9 +1,0 @@
-rhodes_path='D:/MotorolaRhoMobileSuite2.2.1.13/ruby/lib/ruby/gems/1.9.1/gems/rhodes-3.5.1.13'
-app_version='1.0'
-app_name='SamewayIQApp'
-reload_app_changes=0
-debug_port=
-debug_host='127.0.0.1'
-platform='android'
-os_version='4.0.3'
-ext_path=D:/MotorolaRhoMobileSuite2.2.1.13/ruby/lib/ruby/gems/1.9.1/gems/rhodes-3.5.1.13/lib/extensions/json;

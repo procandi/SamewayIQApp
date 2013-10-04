@@ -11,7 +11,7 @@
       <%= @report %>
     <% end %>
 
-    <form method="GET" action="<%= url_for :controller => :Settings, :action => :get_image_list, id: @id %>">
+    <form method="GET" action="<%= url_for :controller => :Settings, :action => :get_image_list, :query=>{:accno=>@accno} %>">
       <input type="submit" value="檢視影像"/>
     </form>
   </div>
