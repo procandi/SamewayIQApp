@@ -7,10 +7,9 @@ require 'helpers/browser_helper'
 class SettingsController < Rho::RhoController
   include BrowserHelper
   
-  #move image serials to next step
-  def do_move_right
+  #to do move image serials to next step
+  def do_image_move_right
     set_login_menu
-    get_config
     
     @accno=@params['accno']
     @index=@params['index'].to_i()+1
@@ -20,13 +19,14 @@ class SettingsController < Rho::RhoController
     @temp=@params['imagelist'].gsub(/[\"\[\]]/,'').gsub('\\\\','\\')
     @imagelist=@temp.split(',')
 
-    do_image()
+    get_image(@imagelist,@index)
+    
+    render :action => :image
   end
   
-  #move image serials to previous step
-  def do_move_left
+  #to do move image serials to previous step
+  def do_image_move_left
     set_login_menu
-    get_config
     
     @accno=@params['accno']
     @index=@params['index'].to_i()-1
@@ -36,13 +36,17 @@ class SettingsController < Rho::RhoController
     @temp=@params['imagelist'].gsub(/[\"\[\]]/,'').gsub('\\\\','\\')
     @imagelist=@temp.split(',')
     
-    do_image()
+    get_image(@imagelist,@index)
+    
+    render :action => :image
   end
     
   #getting image from FTP server
-  def do_image()  
-    file_name = File.join(Rho::RhoApplication::get_base_app_path+'public/', "img#{@index}.jpg")
-    url=@imagelist[@index].gsub('\\','/').gsub(/.*Cris_Images\//,"http://#{@ip}:#{@port}/")
+  def get_image(imagelist,index)
+    get_config
+    
+    file_name = File.join(Rho::RhoApplication::get_base_app_path+'public/', "img#{index}.jpg")
+    url=imagelist[index].gsub('\\','/').gsub(/.*Cris_Images\//,"http://#{@ip}:#{@port}/")
     Rho::AsyncHttp.download_file(
       :url => url,
       :filename => file_name,
@@ -51,18 +55,13 @@ class SettingsController < Rho::RhoController
     )
 
     @image=file_name  
-
-    render :action => :image
   end
   
   #getting image list from Sinatra RESTful server
-  def get_image_list
-    set_login_menu
+  def get_image_list(accno)
     get_config
-        
-    @accno=@params['accno'].gsub('{','').gsub('}','')
     
-    request="http://#{@ip}:#{@port}/GetImageListByAccessionNO/#{@accno}"
+    request="http://#{@ip}:#{@port}/GetImageListByAccessionNO/#{accno}"
     res = Rho::AsyncHttp.get(
       :url => request
     )
@@ -79,23 +78,37 @@ class SettingsController < Rho::RhoController
       @temp[i][0]+@temp[i][1]
     end
     @index=0
-
-    do_image()  
+  end
+  
+  #to do image list and image
+  def do_image
+    set_login_menu
+        
+    @accno=@params['accno'].gsub('{','').gsub('}','')
+    get_image_list(@accno)
+    get_image(@imagelist,@index)
+    
+    render :action => :image
   end
   
   #getting report data from Sinatra RESTful server
-  def do_report
-    set_login_menu
-    get_config
+  def get_report(accno)
+    get_config    
     
-    @accno=@params['accno'].gsub('{','').gsub('}','')
-    
-    request="http://#{@ip}:#{@port}/OpenReportByAccessionNO/#{@accno}"
+    request="http://#{@ip}:#{@port}/OpenReportByAccessionNO/#{accno}"
     res = Rho::AsyncHttp.get(
       :url => request
     )
     
     @report = Rho::JSON.parse(res["body"].gsub('\\\r\\\n','<br>'))
+  end
+  
+  #to do report data
+  def do_report
+    set_login_menu
+
+    @accno=@params['accno'].gsub('{','').gsub('}','')
+    get_report(@accno)
         
     render :action => :report
   end
@@ -118,18 +131,6 @@ class SettingsController < Rho::RhoController
     render :action => :home
   end
   
-  #setting login menu after logged
-  def set_login_menu 
-    @menu={
-      "前一頁" => :back,
-      "回清單" => Rho::RhoConfig.options_path+'/verify_faild',
-      "登出" => Rho::RhoConfig.start_path,
-      "重新整理" => :refresh, 
-      "關閉系統" => :close,
-      "除錯" => :log
-    }
-  end  
-  
   #login user information verify
   def do_login
     @id=@params['id']
@@ -142,9 +143,22 @@ class SettingsController < Rho::RhoController
     end
   end
   
-  #get the saved config and show config page
+  #setting login menu after logged
+  def set_login_menu 
+    @menu={
+      "前一頁" => :back,
+      "回清單" => Rho::RhoConfig.options_path+'/verify_faild',
+      "登出" => Rho::RhoConfig.start_path,
+      "重新整理" => :refresh, 
+      "關閉系統" => :close,
+      "除錯" => :log
+    }
+  end  
+  
+  #go to config page and get the saved config
   def go_config
     get_config
+    
     render :action => :config
   end
   
@@ -164,8 +178,15 @@ class SettingsController < Rho::RhoController
     end
   end
   
-  #setting config to file
+  #to do saved config
   def do_config
+    set_config
+    
+    render :action => :verify_success
+  end
+  
+  #setting config to file
+  def set_config
     @ip=@params['ip']
     @port=@params['port']
       
@@ -174,7 +195,5 @@ class SettingsController < Rho::RhoController
     fout=File.open(path_to_prop,'w')
     fout.write("#{@ip}:#{@port}")
     fout.close
-    
-    render :action => :verify_success
   end
 end
