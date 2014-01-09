@@ -1,0 +1,18 @@
+<div data-role="page">
+
+  <div data-role="header" data-position="inline">
+    <h1>軒崴影像查詢系統</h1>
+  </div>
+
+  <div data-role="content">
+    <form method="GET" action="<%= url_for :controller => :Settings, :action => :get_elink_byaccno %>">
+      <div data-role="fieldcontain">
+        <label for="id" class="itemLabel">單號:</label>
+        <input type="text" id="accno" name="accno" class="itemValue" />
+      </div>
+      <p>ex : 1435166805</p>
+      <input type="submit" value="Query"/>
+    </form>
+  </div>
+
+</div>

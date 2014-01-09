@@ -1,0 +1,18 @@
+<div data-role="page">
+
+  <div data-role="header" data-position="inline">
+    <h1>軒崴影像查詢系統</h1>
+  </div>
+
+  <div data-role="content">
+    <form method="GET" action="<%= url_for :controller => :Settings, :action => :get_elink_bydate %>">
+      <div data-role="fieldcontain">
+        <label for="id" class="itemLabel">日期:</label>
+        <input type="text" id="date" name="date" class="itemValue" />
+      </div>
+      <p>ex : 2012/10/25</p>
+      <input type="submit" value="Query"/>
+    </form>
+  </div>
+
+</div>
